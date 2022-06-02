@@ -1,6 +1,7 @@
 import {Link, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import OfferedResumeCard from "./OfferedResumeCard/OfferedResumeCard";
 
 const OfferedResume = () => {
     const {vacationId} = useParams()
@@ -16,7 +17,6 @@ const OfferedResume = () => {
             let tmp = resumes
             tmp.push(response.data.Resumes[0])
             setResumes(tmp)
-            console.log(tmp)
         }
     }
 
@@ -44,12 +44,12 @@ const OfferedResume = () => {
                             <h4 className="text-right">Запропоновані резюме</h4>
                         </div>
                         <div>
-
+                            {resumes.map((resume) => <OfferedResumeCard resume={resume} key={resume.Id}/>)}
                         </div>
-                        <Link to="/profile">
+                        <Link to={`/vacation/${vacationId}`}>
                             <div className="text-center">
                                 <button type="submit"
-                                        className="btn btn-exit-color mt-2 px-5 w-100">Повернутися в профіль
+                                        className="btn btn-exit-color mt-2 px-5 w-100">Повернутися до вакансії
                                 </button>
                             </div>
                         </Link>

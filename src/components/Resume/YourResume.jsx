@@ -2,8 +2,9 @@ import {Link} from "react-router-dom";
 import axios from "axios";
 import {useEffect, useState} from "react";
 
-const Resume = () => {
+const YourResume = () => {
     const [currentUser, setCurrentUser] = useState({})
+    const [vacationId, setVacationId] = useState({})
     const [userInfo, setUserInfo] = useState(null)
     const [jobTitle, setJobTitle] = useState("")
     const [salary, setSalary] = useState("")
@@ -22,6 +23,7 @@ const Resume = () => {
             window.location.href = "/profile"
         }
 
+        setVacationId(response.data.Resumes[0].Id)
         setJobTitle(response.data.Resumes[0].JobTitle)
         setSalary(response.data.Resumes[0].OfferedSalary)
         setExperience(response.data.Resumes[0].Experience)
@@ -62,6 +64,17 @@ const Resume = () => {
                 alert(`Помилка: ${response.status}`)
         } else {
             alert("Всі поля повинні бути заповнені")
+        }
+    }
+
+    async function onDeleteResume() {
+        let response = await axios.delete(`https://localhost:44335/api/Resume/${userInfo.Resumes[0].Id}`)
+        if (response.status === 204) {
+            alert("Успішно видалено")
+            window.location.href="/profile";
+        }
+        else {
+            alert(`Помилка: ${response.status}`)
         }
     }
 
@@ -109,6 +122,16 @@ const Resume = () => {
                                         <button onClick={onResumeChange}   type="submit" className="btn btn-color px-5 mt-3 w-100">Зберегти зміни
                                         </button>
                                     </div>
+                                    <Link to={`${vacationId}/vacation-offered`}>
+                                        <button type="submit"
+                                                className="btn  btn-color mt-2 px-5 w-100">Переглянути запропоновані вакансії
+                                        </button>
+                                    </Link>
+                                    <div className="text-center">
+                                        <button onClick={onDeleteResume} type="submit"
+                                                className="btn btn-exit-color mt-2 px-5 w-100">Видалити резюме
+                                        </button>
+                                    </div>
                                 </div>
                             }
                             <Link to="/profile">
@@ -126,4 +149,4 @@ const Resume = () => {
     )
 }
 
-export default Resume;
+export default YourResume;
